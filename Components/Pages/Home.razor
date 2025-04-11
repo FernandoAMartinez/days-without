@@ -1,0 +1,172 @@
+﻿@page "/"
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@rendermode InteractiveServer
+
+<PageTitle>Days Without</PageTitle>
+<article class='@(toggleDark ? "dark" : null)'>
+	<div class="tracker-container">
+		<div class="tracker-card">
+			<div class="tracker-header">
+				<h1 class="text-2xl font-bold">Days Without 🔥</h1>
+				<button class="theme-toggle" @onclick="ToggleTheme" title="Cambiar tema">🌓</button>
+			</div>
+			<!-- contenido del tracker -->
+			@if (Tracker is null)
+			{
+				<EditForm Model="@this" OnValidSubmit="StartTracking" FormName="TrackerForm">
+					<div class="input-group">
+						<label class="input-label" for="habit">Habit</label>
+						<InputText class="tracker-input" @bind-Value="TempHabitName" placeholder="Enter a habit (e.g. smoking)" />
+					</div>
+					<div class="input-group">
+						<label class="input-label" for="start">From</label>
+						<InputDate class="tracker-input" @bind-Value="StartDate" />
+					</div>
+					<button class="tracker-button" type="submit">Start</button>
+				</EditForm>
+			}
+			else
+			{
+				<div class="mb-4">
+					<p class="streak-display">Days without <strong>@Tracker.Habit</strong>:</p>
+					<p class="days-counter">@DaysPassed days</p>
+					<p class="days-subtext">(Since @Tracker.StartDate.ToShortDateString())</p>
+				</div>
+				<div class="mb-2 text-sm text-gray-500">
+					Streak: <strong>@MaxStreak</strong> days • Last Reset: @Tracker.LastReset.ToShortDateString()
+				</div>
+				<button class="tracker-button secondary mt-2" @onclick="Reset">Reset</button>
+				<button class="tracker-button danger mt-2" @onclick="Clear">Clear</button>
+			}
+		</div>
+
+		<footer class="tracker-footer">
+			<p class="footer-text">
+				Made with ❤️ by <a href="https://github.com/FernandoAMartinez">Fernando Martínez</a>
+			</p>
+		</footer>
+	</div>
+</article>
+
+
+@code {
+	private const string StorageKey = "tracker-data"; 
+	private const string StreakKey = "streak-data";
+	private bool toggleDark = false;
+
+	private TrackerData? Tracker;
+	private string TempHabitName;
+	private DateTime StartDate;
+	private int MaxStreak = 0;
+
+	private int DaysPassed => Tracker is null ? 0 : (DateTime.Today - Tracker.StartDate).Days;
+
+
+	protected override async Task OnInitializedAsync()
+	{
+
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			Tracker = await localStorage.GetItemAsync<TrackerData>(StorageKey);
+
+			MaxStreak = await localStorage.GetItemAsync<int>(StreakKey);
+
+			if (!(await localStorage.ContainKeyAsync("theme")))
+			{
+				await localStorage.SetItemAsStringAsync("theme", "light");
+			}
+			else
+			{
+				string theme = await localStorage.GetItemAsStringAsync("theme");
+
+				if (theme == "dark")
+				{
+					toggleDark = true;
+				}
+				else
+				{
+					toggleDark = false;
+				}
+			}
+
+			StateHasChanged(); // triggers re-render with loaded data
+		}
+
+	}
+
+	private async Task HandleStreak()
+	{
+		if (!MaxStreak.Equals(0))
+		{
+			if (Tracker.Streak > MaxStreak)
+			{
+				MaxStreak = Tracker.Streak;
+				await localStorage.SetItemAsync(StreakKey, MaxStreak);
+			}
+		}
+		else
+		{
+			MaxStreak = Tracker.Streak;
+			await localStorage.SetItemAsync(StreakKey, MaxStreak);
+		}
+	}
+
+	private async Task StartTracking()
+	{
+		Tracker = new TrackerData(
+			Habit: TempHabitName,
+			StartDate: StartDate,
+			LastReset: DateTime.Today,
+			Streak: (DateTime.Today - StartDate).Days
+		);
+
+		await HandleStreak();
+
+		await localStorage.SetItemAsync(StorageKey, Tracker);
+	}
+
+	private async Task Reset()
+	{
+		if (Tracker != null)
+		{
+			Tracker = new TrackerData(
+				Habit: Tracker.Habit,
+				StartDate: DateTime.Today,
+				LastReset: DateTime.Today,
+				Streak: 0
+			);
+
+			await localStorage.SetItemAsync(StorageKey, Tracker);
+		}
+		else
+		{
+			TempHabitName = "";
+			StartDate = DateTime.Today;
+		}
+	}
+
+	private async Task Clear()
+	{
+		Tracker = null;
+		await localStorage.RemoveItemAsync(StorageKey);
+	}
+
+	private async Task ToggleTheme()
+	{
+		toggleDark = !toggleDark;
+		string theme = await localStorage.GetItemAsStringAsync("theme");
+
+		if (theme == "dark")
+		{
+			await localStorage.SetItemAsStringAsync("theme", "light");
+		}
+		else
+		{
+			await localStorage.SetItemAsStringAsync("theme", "dark");
+		}
+	}
+}

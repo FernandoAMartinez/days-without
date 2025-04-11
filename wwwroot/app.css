@@ -1,0 +1,231 @@
+:root {
+    --color-accent: #10b981; /* emerald-500 */
+    --color-accent-dark: #059669;
+    --color-bg: #ffffff;
+    --color-card: #f3f4f6;
+    --color-input-bg: #ffffff;
+    --color-input-border: #d1d5db;
+    --color-shadow: rgba(0, 0, 0, 0.05);
+    --color-subtle-text: #6b7280; /* gray-600 */
+    --color-text: #1f2937;
+}
+
+[data-theme="dark"],
+.dark {
+    --color-accent: #34d399;
+    --color-accent-dark: #10b981;
+    --color-bg: #1f2937;
+    --color-card: #374151;
+    --color-input-bg: #4b5563;
+    --color-input-border: #6b7280;
+    --color-shadow: rgba(255, 255, 255, 0.05);
+    --color-text: #f9fafb;
+}
+
+/* Layout */
+.tracker-container {
+    align-items: center;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card */
+.tracker-card {
+    background-color: var(--color-card);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px var(--color-shadow);
+    max-width: 500px;
+    padding: 2rem;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+    .tracker-card h1 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+    }
+
+/* Header */
+.tracker-header {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+    .tracker-header h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0;
+    }
+
+/* Inputs */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+    .input-group label {
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+
+    .input-group input {
+        background-color: var(--color-input-bg);
+        border: 1px solid var(--color-input-border);
+        border-radius: 0.5rem;
+        color: var(--color-text);
+        padding: 0.6rem;
+    }
+
+.input-label {
+    color: var(--color-text);
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.tracker-input {
+    background-color: var(--color-card);
+    border: 2px solid var(--color-input-border);
+    border-radius: 0.5rem;
+    color: var(--color-text);
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+
+    .tracker-input:focus {
+        border-color: var(--color-accent);
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2); /* accent glow */
+        outline: none;
+    }
+
+/* Buttons */
+.tracker-button {
+    background-color: var(--color-accent);
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 0.3rem;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.2s ease-in-out;
+}
+
+    .tracker-button:hover {
+        background-color: var(--color-accent-dark);
+    }
+
+    /* Botón secundario */
+    .tracker-button.secondary {
+        background-color: transparent;
+        border: 2px solid var(--color-accent);
+        color: var(--color-accent);
+    }
+
+        .tracker-button.secondary:hover {
+            background-color: var(--color-accent);
+            color: white;
+        }
+
+    /* Botón de acción destructiva */
+    .tracker-button.danger {
+        background-color: #dc2626; /* rojo fuerte */
+        border: none;
+        color: white;
+    }
+
+        .tracker-button.danger:hover {
+            background-color: #b91c1c;
+        }
+
+/* Theme toggle */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0.4rem 0.6rem;
+    transition: background-color 0.3s;
+}
+
+    .theme-toggle:hover {
+        background-color: var(--color-accent-hover);
+    }
+
+/* Days counter */
+.days-counter {
+    color: var(--color-accent);
+    font-size: 3rem; /* text-4xl */
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-align: center;
+}
+
+.days-subtext {
+    color: var(--color-subtle-text);
+    font-size: 0.875rem; /* text-sm */
+    font-style: italic;
+    text-align: center;
+}
+
+/* Streak display */
+.streak-display {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+}
+
+/* Footer */
+.tracker-footer {
+    color: var(--color-subtle-text);
+    margin-top: 2rem;
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.footer-text {
+    font-size: 0.875rem;
+}
+
+    .footer-text a {
+        color: var(--color-accent);
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+
+/* Spacing helpers */
+.mb-2 {
+    margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.mt-2 {
+    margin-top: 0.5rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
