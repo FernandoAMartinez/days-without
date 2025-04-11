@@ -1,6 +1,6 @@
 # Days Without 🔥
 
-**Days Without** is a simple habit tracker built with Blazor (.NET 8) and Tailwind CSS. It's designed to help you track how many days have passed since a specific event or habit reset, and it's meant to be both functional and visually appealing.
+**Days Without** is a simple habit tracker built with Blazor (.NET 8). It's designed to help you track how many days have passed since a specific event or habit reset, and it's meant to be both functional and visually appealing.
 
 ## 🔧 Features
 
